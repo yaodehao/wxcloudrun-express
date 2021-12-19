@@ -15,46 +15,36 @@ app.use(logger)
 // 首页
 app.get('/', async (req, res) => {  res.sendFile(path.join(__dirname, 'index.html'))})
 app.use('/vue', express.static('vue'));
+app.use('/map', express.static('map'));
+app.use('/common', express.static('common'));
 app.use('/images', express.static('images'));
+
+
+
 
 // 更新计数
 app.post('/api/count', async (req, res) => {
   const { action } = req.body
-  if (action === 'inc') {
-    await Counter.create()
+  if (action === 'inc') {    await Counter.create()
   } else if (action === 'clear') {
-    await Counter.destroy({
-      truncate: true
-    })
+    await Counter.destroy({     truncate: true    })
   }
-  res.send({
-    code: 0,
-    data: await Counter.count()
+  res.send({    code: 0,    data: await Counter.count()
   })
 })
 
 // 获取计数
-app.get('/api/count', async (req, res) => {
-  const result = await Counter.count()
-  res.send({
-    code: 0,
-    data: result
-  })
+app.get('/api/count', async (req, res) => {  const result = await Counter.count()
+  res.send({    code: 0,    data: result  })
 })
 
 // 小程序调用，获取微信 Open ID
-app.get('/api/wx_openid', async (req, res) => {
-  if (req.headers['x-wx-source']) {
-    res.send(req.headers['x-wx-openid'])
-  }
-})
+app.get('/api/wx_openid', async (req, res) => {  if (req.headers['x-wx-source']) {    res.send(req.headers['x-wx-openid'])  }})
 
 const port = process.env.PORT || 80
 
-async function bootstrap() {
-  await initDB()
-  app.listen(port, () => {
-    console.log('启动成功', port)
+async function bootstrap() {  await initDB()
+  app.listen(port, () => {    console.log('启动成功', port)
   })
 }
 
